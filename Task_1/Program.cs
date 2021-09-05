@@ -11,16 +11,14 @@ namespace Task_1
         static void Main(string[] args)
         {
             UtilityClass.PrintHeader("* * * * * Работа с числом N * * * * *");
-            long numN = CheckFile();
+            OperationSelect(typeOper: 1);
+            //long numN = CheckFile();
 
-            if (numN > 0)
-            {
-                Console.WriteLine($"Число N: {numN.ToString("# ### ### ###")}");
-
-                //Console.WriteLine("\nВыбор операции расчета: \n 1. Полный расчет групп\n 2. Расчет количества групп \n 3. Выход из программы");
-                OperationSelect(numN);
-            }
-
+            //if (numN > 0)
+            //{
+            //Console.WriteLine($"Число N: {numN.ToString("# ### ### ###")}");
+            //OperationSelect(numN);
+            //}
             Console.ReadLine();
         }
         /// <summary>
@@ -28,65 +26,53 @@ namespace Task_1
         /// </summary>
         /// <param name="numN"></param>
         /// <param name="typeOper">Тип операции. По умолчанию - 0(первый выбор операций), 1 - второй выбор. </param>
-        private static void OperationSelect(long numN, byte typeOper = 0)
+        private static void OperationSelect(long numN = 0, byte typeOper = 0)
         {
-            string[] operations1 = new string[] { "1. Полный расчет групп", "2. Расчет количества групп", "3. Выход из программы" };
-            string[] operations2 = new string[] { "1. Поместить файл в архив (возможно восстание машин...)", "2. Не помещать файл в архив" };
+            string[] operations = new string[] { "Открыть файл", "Выход из программы", "Расчет количества групп",
+                "Полный расчет групп", "Поместить файл в архив (возможно восстание машин...)", "Не помещать файл в архив"};
             byte result;
-            if (typeOper == 0)
+            int minOut = typeOper * 2;
+            int maxOut = minOut + 2;
+            int count = 0;
+            do
             {
-                Console.WriteLine("\nВыбор операции расчета: ");
-                foreach (var item in operations1)
+                Console.WriteLine("\nВыбор операции: ");
+                for (int i = minOut; i < maxOut; i++)
                 {
-                    Console.WriteLine($"{item}");
+                    Console.WriteLine($"{count + 1}. {operations[i]}");
                 }
+                byte.TryParse(Console.ReadLine(), out result);
+            } while (result > maxOut || result <= minOut);
 
-                do
-                {
-                    byte.TryParse(Console.ReadLine(), out result);
-                    switch (result)
-                    {
-                        case 1:
-                            FullCalculate(numN);
-                            break;
-                        case 2:
-                            CountCalculate(numN);
-                            break;
-                        case 3:
 
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                while (result > operations1.Length & result < 1);
-            }
-            else
+            switch (result)
             {
-                Console.WriteLine("\nВыбор операции архивирования: ");
-                foreach (var item in operations2)
-                {
-                    Console.WriteLine($"{item}");
-                }
+                case 1://Открыть файл
 
-                do
-                {
-                    byte.TryParse(Console.ReadLine(), out result);
-                    switch (result)
-                    {
-                        case 1:
-                            ArchiveFile();
-                            break;
-                        case 2:
+                    break;
+                case 2://Выход из программы
+                    Console.WriteLine("До свидания!");
+                    break;
+                case 3://Расчет количества групп
+                    CountGroupCalculate(numN);
 
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                while (result > operations2.Length & result < 1);
+                    break;
+                case 4://Полный расчет групп
+                    FullCalculate(numN);
+                    break;
+
+                case 5://Поместить файл в архив (возможно восстание машин...)
+                    ArchiveFile();
+                    break;
+
+                case 6://Не помещать файл в архив
+
+                    break;
+                default:
+                    break;
             }
         }
+
         /// <summary>
         /// Архивировать файл с группами
         /// </summary>
@@ -108,10 +94,11 @@ namespace Task_1
         /// Расчет количества групп, вывод кол-ва на экран.
         /// </summary>
         /// <param name="numN"></param>
-        private static void CountCalculate(long numN)
+        private static void CountGroupCalculate(long numN)
         {
             int groupCount = (int)Math.Ceiling(Math.Log(numN, 2));
             Console.WriteLine($"Количество групп для числа {numN.ToString("# ### ### ###")}: {groupCount}");
+
         }
 
         /// <summary>
